@@ -1,0 +1,556 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Castmill API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="javascript">javascript</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='#'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Welcome to Castmill public API. With this API you can access all the services provided
+by Castmill in a programatic way.</p>
+
+<p>We provide examples in curl and javascript (node).</p>
+
+<p>The API is quite uniform, so manipulating and getting resources often use the same APIS, just
+the endpoints are different.</p>
+
+<h3 id="query-strings">Query strings</h3>
+
+<p>For endpoints that return collections, there are a few query parameters that can be used
+for search, filtering as well as pagination:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>limit</td>
+<td>{Number} Max amount of items returned</td>
+</tr>
+<tr>
+<td>skip</td>
+<td>{Number} Skip given amount of items.</td>
+</tr>
+<tr>
+<td>fields</td>
+<td>{String} A list of space separated fields to include.</td>
+</tr>
+<tr>
+<td>cond</td>
+<td>{Object} A query object</td>
+</tr>
+</tbody></table>
+
+<p>Query objects support all query commands provided by
+<a href="https://docs.mongodb.org/manual/tutorial/query-documents/">mongodb</a></p>
+
+<p>Examples:</p>
+
+<p><code class="prettyprint">api.castmill.com/users/?limit=4&amp;fields=name email&amp;cond[name]=john</code></p>
+
+          <h1 id="authentication">Authentication</h1>
+
+<blockquote>
+<p>To authorize, use this code:</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">castmill</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'castmill'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">castmill</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'mycastmilltoken'</span><span class="p">)</span>
+</code></pre>
+<pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
+curl <span class="s2">"api.castmill.com"</span>
+  -H <span class="s2">"Authorization: mycastmilltoken"</span>
+</code></pre>
+
+<blockquote>
+<p>Make sure to replace <code class="prettyprint">mycastmilltoken</code> with your API key.</p>
+</blockquote>
+
+<p>Castmill uses JWT for authentication. You will get a secret token from your Castmill instance that you
+can use to access the API, and depending on your user access level you will be able to perform
+different calls (see rights and quotas).</p>
+
+<p>We provide examples using curl and node, but there are jwt libraries available for most language.</p>
+
+<p>The API calls require an <code class="prettyprint">Authorization</code> header with a JWT token. You can get your secret API token
+from your Account page:</p>
+
+<p><code class="prettyprint">Authorization: mycastmilltoken</code></p>
+
+<aside class="notice">
+You must replace <code>mycastmilltoken</code> with your personal API key.
+</aside>
+
+          <h1 id="users">Users</h1>
+
+<p>The users endpoint provides methods for managing the users in the system.</p>
+
+<h2 id="create-user">Create user</h2>
+
+<p>A user is created by calling this API. When using this method, it is possible to
+allow the user to login on the instance login page, where he will be asked for
+a specific login and password, or using  to the SSO mechanism provided by the API.</p>
+
+<p><code class="prettyprint">POST http://api.castmill.com/users</code></p>
+
+<h3 id="mandatory-body-parameters">Mandatory Body parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email</td>
+<td>{String} A valid email, it will be used to identify a given user.</td>
+</tr>
+<tr>
+<td>sso</td>
+<td>{Boolean} A boolean represeting if the user can login only via SSO.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-a-single-user">Get a single user</h2>
+
+<p>Returns all the details of a given user.</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/users/:id</code></p>
+
+<h2 id="get-users">Get users</h2>
+
+<p>Returns a collection with all the users in the system, or the result of a <code class="prettyprint">query</code>.</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/users</code></p>
+
+<h2 id="edit-user">Edit user</h2>
+
+<p>Edit some fields in a user.</p>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/users</code></p>
+
+<h2 id="remove-user">Remove user</h2>
+
+<p>Removes a user from the system.</p>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/users/:id</code></p>
+
+<h2 id="get-users-groups">Get users groups</h2>
+
+<p>Returns the groups where a user is part of. Groups are used to share resources
+between users.</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/users/:id/groups</code></p>
+
+<h2 id="get-user-resources">Get user resources</h2>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">owner:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">id:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">collection:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">permissions:</span><span class="w"> </span><span class="err">[String],</span><span class="w">
+    </span><span class="err">populated:</span><span class="w"> </span><span class="err">{Object</span><span class="p">}</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+
+<p>Returns all the resources that a user has access to. The resources are wrapped with
+some data useful for handling the resources, such as owner of the resource as well
+as its permissions.</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/users/:id/resources</code></p>
+
+          <h1 id="single-sign-on">Single Sign On</h1>
+
+<p>Castmill provides an API for implementing single sign on (SSO) on any IT infrastructure.
+The SSO is implemented using JWT (<a href="https://jwt.io">JSON Web Tokens</a>). You can login
+in Castmill and if you have the proper rights, request a JWT token that can be used
+for authenticating a user on Castmill.</p>
+
+<h2 id="request-a-jwt-token">Request a JWT Token</h2>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysecrettoken"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>Returns
+<code class="prettyprint">json
+{
+  &quot;redirectUrl&quot;: &quot;https://castmill.com/login&quot;,
+  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ&quot;
+}
+</code></p>
+</blockquote>
+
+<p><code class="prettyprint">POST http://api.castmill.com/login</code></p>
+
+<p>A JWT token can be requested with this API. It returns a JWT token that can be used for
+redirecting to a castmill instance and be automatically logged in.</p>
+
+<blockquote>
+<p>Example
+<code class="prettyprint">shell
+https://app.castmill.com/login?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+</code></p>
+</blockquote>
+
+<h2 id="setting-a-login-redirect">Setting a login redirect.</h2>
+
+<p>In a Single sign on environment, you will probably want to define a login page to be
+redirected to if a user tries to go directly to your Castmill instance. Using the
+<em>settings</em> API you can define a property &ldquo;redirectSSO&rdquo; with a url to your login page.</p>
+
+<p>Check the <em>settings</em> for details on this API.</p>
+
+          <h1 id="medias">Medias</h1>
+
+<h2 id="upload-media">Upload media</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/medias</code></p>
+
+<h2 id="get-a-media">Get a media</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/medias/:id</code></p>
+
+<h2 id="get-medias">Get medias</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/medias</code></p>
+
+<h2 id="edit-media">Edit media</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/medias/:id</code></p>
+
+<h2 id="remove-media">Remove media</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/medias/:id</code></p>
+
+          <h1 id="playlists">Playlists</h1>
+
+<h2 id="create-playlist">Create playlist</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/playlists</code></p>
+
+<h2 id="get-a-playlist">Get a playlist</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/playlists/:id</code></p>
+
+<h2 id="get-playlists">Get playlists</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/playlists</code></p>
+
+<h2 id="edit-playlist">Edit playlist</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/playlists/:id</code></p>
+
+<h2 id="add-media-widget-to-playlist">Add media/widget to playlist</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/playlists/:id/entries</code></p>
+
+<h2 id="remove-a-media-widget-from-a-playlist">Remove a media/widget from a playlist</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/playlists/:id/entries</code></p>
+
+<h2 id="remove-playlist">Remove playlist</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/playlists/:id</code></p>
+
+          
+          <h1 id="calendars">Calendars</h1>
+
+<h2 id="create-calendar">Create calendar</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/calendars</code></p>
+
+<h2 id="get-a-calendar">Get a calendar</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/calendars/:id</code></p>
+
+<h2 id="get-calendars">Get calendars</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/calendars</code></p>
+
+<h2 id="edit-calendar">Edit calendar</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/calendars/:id</code></p>
+
+<h2 id="add-entry-to-calendar">Add entry to calendar</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/calendars/:id/entries</code></p>
+
+<h2 id="remove-an-entry-from-a-calendar">Remove an entry from a calendar</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/calendars/:id/entries</code></p>
+
+<h2 id="remove-calendar">Remove calendar</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/calendars/:id</code></p>
+
+          <h1 id="groups">Groups</h1>
+
+<h2 id="create-a-group">Create a group</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/groups</code></p>
+
+<h2 id="get-a-group">Get a group</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/groups/:id</code></p>
+
+<h2 id="get-groups">Get groups</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/groups</code></p>
+
+<h2 id="edit-group">Edit group</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id</code></p>
+
+<h2 id="add-users-to-group">Add users to group</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/users</code></p>
+
+<h2 id="remove-users-from-a-group">Remove users from a group</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/users</code></p>
+
+<h2 id="insert-resources-in-a-group">Insert resources in a group</h2>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">owner:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">id:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">collection:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">permissions:</span><span class="w"> </span><span class="err">[String]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/resources</code></p>
+
+<h2 id="get-resources-from-a-group">Get resources from a group</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/groups/:id/resources</code></p>
+
+<h2 id="remove-resources-from-a-group">Remove resources from a group</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/resources</code></p>
+
+<h2 id="remove-group">Remove group</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id</code></p>
+
+          <h1 id="displays">Displays</h1>
+
+<h2 id="register-a-display">Register a display</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/displays</code></p>
+
+<h2 id="get-a-display">Get a display</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/displays/:id</code></p>
+
+<h2 id="get-displays">Get displays</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/displays</code></p>
+
+<h2 id="edit-display">Edit display</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/displays/:id</code></p>
+
+<h2 id="assign-calendars-to-display">Assign calendars to display</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/displays/:id/calendars</code></p>
+
+<h2 id="remove-calendar-from-a-display">Remove calendar from a display</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/displays/:id/entries</code></p>
+
+<h2 id="remove-display">Remove display</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/displays/:id</code></p>
+
+<h2 id="display-events">Display events</h2>
+
+<p>GET /displays/:id
+GET /displays/:id/events</p>
+
+          
+          <h1 id="errors">Errors</h1>
+
+<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
+
+<p>The Kittn API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified kitten could not be found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&rsquo;m a teapot</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="javascript">javascript</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
