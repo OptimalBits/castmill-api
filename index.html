@@ -176,20 +176,22 @@ for search, filtering as well as pagination:</p>
 <pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
 curl <span class="s2">"api.castmill.com"</span>
   -H <span class="s2">"Authorization: mycastmilltoken"</span>
+
+<span class="c"># You can also use the query string parameter 'accessToken'</span>
+curl <span class="s2">"api.castmill.com?accessToken=mycastmilltoken"</span>
 </code></pre>
 
 <blockquote>
 <p>Make sure to replace <code class="prettyprint">mycastmilltoken</code> with your API key.</p>
 </blockquote>
 
-<p>Castmill uses JWT for authentication. You will get a secret token from your Castmill instance that you
-can use to access the API, and depending on your user access level you will be able to perform
-different calls (see rights and quotas).</p>
+<p>Castmill uses a secret token for authentication. This token can be generated in the Account page.
+The acccess token will provide the same level of access as your castmill account, so please keep
+this token secured, never expose it in client code.</p>
 
-<p>We provide examples using curl and node, but there are jwt libraries available for most language.</p>
+<p>Depending on your user access level you will be able to perform different calls (see rights and quotas).</p>
 
-<p>The API calls require an <code class="prettyprint">Authorization</code> header with a JWT token. You can get your secret API token
-from your Account page:</p>
+<p>The API calls require an <code class="prettyprint">Authorization</code> header with a token or a query string parameter <em>accessToken</em>.</p>
 
 <p><code class="prettyprint">Authorization: mycastmilltoken</code></p>
 
@@ -206,6 +208,13 @@ You must replace <code>mycastmilltoken</code> with your personal API key.
 <p>A user is created by calling this API. When using this method, it is possible to
 allow the user to login on the instance login page, where he will be asked for
 a specific login and password, or using  to the SSO mechanism provided by the API.</p>
+
+<p>When a user is created, the user will receive a welcoming email and a link
+to verify his account. When cliking on the link the user will be able to set
+the desider password.</p>
+
+<p>If the sso boolean is enabled, the user will not get a the welcoming mail, and
+he will only be able to use via SSO.</p>
 
 <p><code class="prettyprint">POST http://api.castmill.com/users</code></p>
 
@@ -235,7 +244,8 @@ a specific login and password, or using  to the SSO mechanism provided by the AP
 
 <h2 id="get-users">Get users</h2>
 
-<p>Returns a collection with all the users in the system, or the result of a <code class="prettyprint">query</code>.</p>
+<p>Returns a collection with all the users in the system, or the result of a <code class="prettyprint">query</code>.
+See <code class="prettyprint">queries</code> for details on how they are specified.</p>
 
 <p><code class="prettyprint">GET http://api.castmill.com/users</code></p>
 
@@ -259,18 +269,52 @@ between users.</p>
 <p><code class="prettyprint">GET http://api.castmill.com/users/:id/groups</code></p>
 
 <h2 id="get-user-resources">Get user resources</h2>
+
+<p>Resources are used to manipulate entities in Castmill that can be shared among users. A resource is a wrapper over an underlying
+entity. The wrapper includes the permissions the current user has over a given resource. It is also possible to manipulate the
+underlying resources directly, but in most cases it is not needed other than for performing administrative tasks.</p>
+
+<p>The available resources are:
+- Medias
+- Playlists
+- Displays
+- Calendars</p>
+
+<p>Resources always belong to a group or directly to a user (its owner). When a resource is created is placed on the creators
+ownership with all the available permissions, but it can later be placed in different groups with different permission sets.</p>
+
+<h3 id="query-params">Query params</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>types</td>
+<td>{String}  a comma separated list of resources</td>
+</tr>
+</tbody></table>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-    </span><span class="err">owner:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">id:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">collection:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">permissions:</span><span class="w"> </span><span class="err">[String],</span><span class="w">
-    </span><span class="err">populated:</span><span class="w"> </span><span class="err">{Object</span><span class="p">}</span><span class="w">
-</span><span class="err">}</span><span class="w">
+    </span><span class="nt">"owner"</span><span class="p">:</span><span class="w"> </span><span class="s2">"String"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"String"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"collection"</span><span class="p">:</span><span class="w"> </span><span class="s2">"String"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[String]"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"populated"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{Object}"</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>Returns all the resources that a user has access to. The resources are wrapped with
 some useful data for handling the resources, such as owner of the resource as well
 as its permissions.</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/users/:id/resources</code></p>
+
+<h2 id="upload-medias">Upload Medias</h2>
+
+<p>It is possible to upload medias to castmill for a given user by using the following API. All media types supported by Castmill
+are algo supported by this API (for example images, videos and audios of any kind, powerpoints, PDFs, and HTML5 content).</p>
 
 <p><code class="prettyprint">GET http://api.castmill.com/users/:id/resources</code></p>
 
@@ -317,6 +361,115 @@ redirected to if a user tries to go directly to your Castmill instance. Using th
 <em>settings</em> API you can define a property &ldquo;redirectSSO&rdquo; with a url to your login page.</p>
 
 <p>Check the <em>settings</em> for details on this API.</p>
+
+          <h1 id="resources">Resources</h1>
+
+<p>Resources are used to manipulate entities in Castmill that can be shared among users. A resource is a wrapper over an underlying
+entity. The wrapper includes the permissions the current user has over a given resource. It is also possible to manipulate the
+underlying resources directly, but in most cases it is not needed other than for performing administrative tasks.</p>
+
+<p>The available resources are:
+- Medias
+- Playlists
+- Displays
+- Calendars</p>
+
+<p>Resources always belong to a group or directly to a user (its owner). When a resource is created is placed on the creators
+ownership with all the available permissions, but it can later be placed in different groups with different permission sets.</p>
+
+<h2 id="get-resources">Get resources</h2>
+
+<p>Resources can be queried using this API. Its possible to specify which resources that should be returned by
+specifing them on the query string.</p>
+
+<h3 id="query-params">Query params</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>types</td>
+<td>{String}  a comma separated list of resources</td>
+</tr>
+</tbody></table>
+
+<p><code class="prettyprint">GET http://api.castmill.com/resources</code></p>
+
+<h2 id="create-a-resource">Create a resource</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/calendars</code></p>
+
+<h2 id="get-calendars">Get calendars</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/calendars</code></p>
+
+<h2 id="edit-calendar">Edit calendar</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/calendars/:id</code></p>
+
+<h2 id="add-entry-to-calendar">Add entry to calendar</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/calendars/:id/entries</code></p>
+
+<h2 id="remove-an-entry-from-a-calendar">Remove an entry from a calendar</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/calendars/:id/entries</code></p>
+
+<h2 id="remove-calendar">Remove calendar</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/calendars/:id</code></p>
+
+          <h1 id="groups">Groups</h1>
+
+<h2 id="create-a-group">Create a group</h2>
+
+<p><code class="prettyprint">POST http://api.castmill.com/groups</code></p>
+
+<h2 id="get-a-group">Get a group</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/groups/:id</code></p>
+
+<h2 id="get-groups">Get groups</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/groups</code></p>
+
+<h2 id="edit-group">Edit group</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id</code></p>
+
+<h2 id="add-users-to-group">Add users to group</h2>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/users</code></p>
+
+<h2 id="remove-users-from-a-group">Remove users from a group</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/users</code></p>
+
+<h2 id="insert-resources-in-a-group">Insert resources in a group</h2>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">owner:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">id:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">collection:</span><span class="w"> </span><span class="err">String,</span><span class="w">
+    </span><span class="err">permissions:</span><span class="w"> </span><span class="err">[String]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/resources</code></p>
+
+<h2 id="get-resources-from-a-group">Get resources from a group</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/groups/:id/resources</code></p>
+
+<h2 id="remove-resources-from-a-group">Remove resources from a group</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/resources</code></p>
+
+<h2 id="remove-group">Remove group</h2>
+
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id</code></p>
 
           <h1 id="medias">Medias</h1>
 
@@ -400,55 +553,6 @@ redirected to if a user tries to go directly to your Castmill instance. Using th
 <h2 id="remove-calendar">Remove calendar</h2>
 
 <p><code class="prettyprint">DELETE http://api.castmill.com/calendars/:id</code></p>
-
-          <h1 id="groups">Groups</h1>
-
-<h2 id="create-a-group">Create a group</h2>
-
-<p><code class="prettyprint">POST http://api.castmill.com/groups</code></p>
-
-<h2 id="get-a-group">Get a group</h2>
-
-<p><code class="prettyprint">GET http://api.castmill.com/groups/:id</code></p>
-
-<h2 id="get-groups">Get groups</h2>
-
-<p><code class="prettyprint">GET http://api.castmill.com/groups</code></p>
-
-<h2 id="edit-group">Edit group</h2>
-
-<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id</code></p>
-
-<h2 id="add-users-to-group">Add users to group</h2>
-
-<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/users</code></p>
-
-<h2 id="remove-users-from-a-group">Remove users from a group</h2>
-
-<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/users</code></p>
-
-<h2 id="insert-resources-in-a-group">Insert resources in a group</h2>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-    </span><span class="err">owner:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">id:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">collection:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">permissions:</span><span class="w"> </span><span class="err">[String]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/resources</code></p>
-
-<h2 id="get-resources-from-a-group">Get resources from a group</h2>
-
-<p><code class="prettyprint">GET http://api.castmill.com/groups/:id/resources</code></p>
-
-<h2 id="remove-resources-from-a-group">Remove resources from a group</h2>
-
-<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/resources</code></p>
-
-<h2 id="remove-group">Remove group</h2>
-
-<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id</code></p>
 
           <h1 id="displays">Displays</h1>
 
