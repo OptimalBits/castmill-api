@@ -326,33 +326,19 @@ in Castmill and if you have the proper rights, request a JWT token that can be u
 for authenticating a user on Castmill.</p>
 
 <h2 id="request-a-jwt-token">Request a JWT Token</h2>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mysecrettoken"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
 
-<blockquote>
-<p>Returns
-<code class="prettyprint">json
-{
-  &quot;redirectUrl&quot;: &quot;https://castmill.com/login&quot;,
-  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ&quot;
-}
-</code></p>
-</blockquote>
-
-<p><code class="prettyprint">POST http://api.castmill.com/login</code></p>
+<p><code class="prettyprint">POST http://api.castmill.com/login/:userId</code></p>
 
 <p>A JWT token can be requested with this API. It returns a JWT token that can be used for
 redirecting to a castmill instance and be automatically logged in.</p>
 
-<blockquote>
-<p>Example
-<code class="prettyprint">shell
-https://app.castmill.com/login?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
-</code></p>
-</blockquote>
+<p>The call returns a JWT token like:</p>
+
+<p><code class="prettyprint">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NzI2NTcyZWVjYjNkYTAxMDBhYjc3MGQiLCJleHAiOjE0NjQxMjM0MTUuMTg3LCJpYXQiOjE0NjQxMjE2MTV9.H51HDjsRtldoSW0gfryf7Vxjs-VeL9yiHnWk52jzUhE</code></p>
+
+<h2 id="authorize-a-user-using-the-jwt-token">Authorize a user using the JWT token</h2>
+
+<p><code class="prettyprint">GET http://api.castmill.com/auth/jwt?token=mytoken</code></p>
 
 <h2 id="setting-a-login-redirect">Setting a login redirect.</h2>
 
