@@ -550,7 +550,28 @@ specifing them on the query string.</p>
 
 <h2 id="register-a-display">Register a display</h2>
 
+<p>Displays can be registered by posting a name and pincode to the endpoint above. The pincode must be the
+same one as the one displayed by the player on the welcome screen.</p>
+
 <p><code class="prettyprint">POST http://api.castmill.com/displays</code></p>
+
+<h3 id="body-params">Body params</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>{String} The name of the display.</td>
+</tr>
+<tr>
+<td>pincode</td>
+<td> {String} The pincode of the display.</td>
+</tr>
+</tbody></table>
 
 <h2 id="get-a-display">Get a display</h2>
 
