@@ -338,7 +338,13 @@ redirecting to a castmill instance and be automatically logged in.</p>
 
 <h2 id="authorize-a-user-using-the-jwt-token">Authorize a user using the JWT token</h2>
 
+<p>With the JWT token provided by the previous API call it is now possible to login as the given user.</p>
+
 <p><code class="prettyprint">GET http://api.castmill.com/auth/jwt?token=mytoken</code></p>
+
+<p>It is also possible to redirect to a certain view when login in using the <code class="prettyprint">redir</code> query parameter:</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/auth/jwt?token=mytoken&amp;redir=/dashboard/medias</code></p>
 
 <h2 id="setting-a-login-redirect">Setting a login redirect.</h2>
 
