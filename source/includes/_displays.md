@@ -3,7 +3,16 @@
 
 ## Register a display
 
+Displays can be registered by posting a name and pincode to the endpoint above. The pincode must be the
+same one as the one displayed by the player on the welcome screen.
+
 `POST http://api.castmill.com/displays`
+
+### Body params
+Parameter | Description
+--------- | -----------
+name | {String} The name of the display.
+pincode | {String} The pincode of the display.
 
 ## Get a display
 
