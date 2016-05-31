@@ -13,12 +13,15 @@ includes:
   - authentication
   - users
   - sso
+  - resources
+  - groups
   - medias
   - playlists
   - players
   - calendars
-  - groups
   - displays
+  - rights
+  - quotas
   - settings
   - errors
 

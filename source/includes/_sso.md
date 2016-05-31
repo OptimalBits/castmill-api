@@ -7,30 +7,25 @@ for authenticating a user on Castmill.
 
 ## Request a JWT Token
 
-```json
-{
-  "email": "john.doe@example.com",
-  "token": "mysecrettoken"
-}
-```
-
-> Returns
-```json
-{
-  "redirectUrl": "https://castmill.com/login",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
-}
-```
-
-`POST http://api.castmill.com/login`
+`POST http://api.castmill.com/login/:userId`
 
 A JWT token can be requested with this API. It returns a JWT token that can be used for
 redirecting to a castmill instance and be automatically logged in.
 
-> Example
-```shell
-https://app.castmill.com/login?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
-```
+The call returns a JWT token like:
+
+`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NzI2NTcyZWVjYjNkYTAxMDBhYjc3MGQiLCJleHAiOjE0NjQxMjM0MTUuMTg3LCJpYXQiOjE0NjQxMjE2MTV9.H51HDjsRtldoSW0gfryf7Vxjs-VeL9yiHnWk52jzUhE`
+
+## Authorize a user using the JWT token
+
+With the JWT token provided by the previous API call it is now possible to login as the given user.
+
+`GET http://api.castmill.com/auth/jwt?token=mytoken`
+
+It is also possible to redirect to a certain view when login in using the `redir` query parameter:
+
+`GET http://api.castmill.com/auth/jwt?token=mytoken&redir=/dashboard/medias`
+
 
 ## Setting a login redirect.
 
