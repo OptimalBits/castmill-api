@@ -416,15 +416,53 @@ specifing them on the query string.</p>
 
           <h1 id="groups">Groups</h1>
 
+<p>Groups provides functionality to share resources between users by defining
+a set of permissions per shared resource. A group is composed of resources and
+users. Every resource can have its permission finegrained defined.</p>
+
+<p>There are 4 different types of resources:
+- Media
+    A media is a image, video, ppt, pdf, or a widget.
+- Playlist
+    A playlist contains a list of medias to be played in sequence.
+- Display
+    A display represents a registered player.
+- Calendar
+    A calendar defines where in time the playlists and medias should be played.</p>
+
 <h2 id="create-a-group">Create a group</h2>
+
+<p>In order to create a group a name and a owner must be defined.</p>
 
 <p><code class="prettyprint">POST http://api.castmill.com/groups</code></p>
 
+<h3 id="body-params">Body params</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>{String} The name of the group</td>
+</tr>
+<tr>
+<td>ownerUsername</td>
+<td> {String} The owner of the group. (email)</td>
+</tr>
+</tbody></table>
+
 <h2 id="get-a-group">Get a group</h2>
+
+<p>With this API you can get the details of a give group.</p>
 
 <p><code class="prettyprint">GET http://api.castmill.com/groups/:id</code></p>
 
 <h2 id="get-groups">Get groups</h2>
+
+<p>You can get all the groups in the system.</p>
 
 <p><code class="prettyprint">GET http://api.castmill.com/groups</code></p>
 
@@ -434,20 +472,55 @@ specifing them on the query string.</p>
 
 <h2 id="add-users-to-group">Add users to group</h2>
 
+<p>Add users to a given group by calling this API. Send in the</p>
+
 <p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/users</code></p>
+
+<h3 id="body-params">Body params</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>_cid</td>
+<td>{String} The id of the user to add to the group.</td>
+</tr>
+</tbody></table>
 
 <h2 id="remove-users-from-a-group">Remove users from a group</h2>
 
-<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/users</code></p>
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/users/:userId</code></p>
 
 <h2 id="insert-resources-in-a-group">Insert resources in a group</h2>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-    </span><span class="err">owner:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">id:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">collection:</span><span class="w"> </span><span class="err">String,</span><span class="w">
-    </span><span class="err">permissions:</span><span class="w"> </span><span class="err">[String]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+
+<p>In order to add a resource to a group, you need to provide the resource Id,
+the type of resource (Media, Playlist, Display or Calendar) as well as an array
+with the permissions for that resource, &lsquo;get&rsquo;, &#39;put&rsquo;, &#39;use&rsquo; or &#39;delete&rsquo;.</p>
+
+<h3 id="body-params">Body params</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>_cid</td>
+<td>{String} The id of the resouce to add to the group.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>{String} The type of resource.</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>String[] An array with permissions.</td>
+</tr>
+</tbody></table>
 
 <p><code class="prettyprint">PUT http://api.castmill.com/groups/:id/resources</code></p>
 
@@ -457,11 +530,18 @@ specifing them on the query string.</p>
 
 <h2 id="remove-resources-from-a-group">Remove resources from a group</h2>
 
-<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/resources</code></p>
+<p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id/resources/:resourceId</code></p>
 
 <h2 id="remove-group">Remove group</h2>
 
 <p><code class="prettyprint">DELETE http://api.castmill.com/groups/:id</code></p>
+
+<h2 id="audit-resources">Audit resources</h2>
+
+<p>Sometimes is usefull to know which groups a resource is part of. This can be used to
+understand why a given user may have rights over a given resource.</p>
+
+<p><code class="prettyprint">GET http://api.castmill.com/audit/:resourceId</code></p>
 
           <h1 id="medias">Medias</h1>
 
