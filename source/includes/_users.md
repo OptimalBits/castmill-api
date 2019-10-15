@@ -6,7 +6,7 @@ The users endpoint provides methods for managing the users in the system.
 
 A user is created by calling this API. When using this method, it is possible to
 allow the user to login on the instance login page, where he will be asked for
-a specific login and password, or using  to the SSO mechanism provided by the API.
+a specific login and password, or using to the SSO mechanism provided by the API.
 
 When a user is created, the user will receive a welcoming email and a link
 to verify his account. When cliking on the link the user will be able to set
@@ -19,10 +19,10 @@ he will only be able to use via SSO.
 
 ### Mandatory Body parameters
 
-Parameter | Description
---------- | -----------
-email | {String} A valid email, it will be used to identify a given user.
-sso | {Boolean} A boolean represeting if the user can login only via SSO.
+| Parameter | Description                                                         |
+| --------- | ------------------------------------------------------------------- |
+| email     | {String} A valid email, it will be used to identify a given user.   |
+| sso       | {Boolean} A boolean represeting if the user can login only via SSO. |
 
 ## Get a single user
 
@@ -63,6 +63,7 @@ entity. The wrapper includes the permissions the current user has over a given r
 underlying resources directly, but in most cases it is not needed other than for performing administrative tasks.
 
 The available resources are:
+
 - Medias
 - Playlists
 - Displays
@@ -72,17 +73,18 @@ Resources always belong to a group or directly to a user (its owner). When a res
 ownership with all the available permissions, but it can later be placed in different groups with different permission sets.
 
 ### Query params
-Parameter | Description
---------- | -----------
-types | {String}  a comma separated list of resources
+
+| Parameter | Description                                  |
+| --------- | -------------------------------------------- |
+| types     | {String} a comma separated list of resources |
 
 ```json
 {
-    "owner": "String",
-    "id": "String",
-    "collection": "String",
-    "permissions": "[String]",
-    "populated": "{Object}"
+  "owner": "String",
+  "id": "String",
+  "collection": "String",
+  "permissions": "[String]",
+  "populated": "{Object}"
 }
 ```
 
@@ -92,11 +94,9 @@ as its permissions.
 
 `GET http://api.castmill.com/users/:id/resources`
 
-
 ## Upload Medias
 
 It is possible to upload medias to castmill for a given user by using the following API. All media types supported by Castmill
 are algo supported by this API (for example images, videos and audios of any kind, powerpoints, PDFs, and HTML5 content).
 
-`GET http://api.castmill.com/users/:id/resources`
-
+`POST http://api.castmill.com/users/:id/medias`
